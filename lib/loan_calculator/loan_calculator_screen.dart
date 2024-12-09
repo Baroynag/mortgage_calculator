@@ -121,7 +121,7 @@ class LoanCalculatorScreen extends StatelessWidget {
         : Padding(
             padding: theme?.errorTextPadding ?? EdgeInsets.zero,
             child: Text(
-              boundError.message,
+              boundError.errorText(),
               style: theme?.errorTextStyle,
             ),
           );

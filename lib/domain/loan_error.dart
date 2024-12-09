@@ -6,13 +6,16 @@ enum LoanBoundsError {
 }
 
 extension LoanBoundsErrorExt on LoanBoundsError {
-  static const Map<LoanBoundsError, String> _errorMessagesText = {
-    LoanBoundsError.zeroAmountError:
-        'Сумма первоначального взноса не может быть 0',
-    LoanBoundsError.zeroPeriodError: 'Период не может быть 0',
-    LoanBoundsError.zeroRateError: 'Процент не может быть 0',
-    LoanBoundsError.loanPercentError: 'Процент не может превышать 100',
-  };
-
-  String get message => _errorMessagesText[this]!;
+  String errorText() {
+    switch (this) {
+      case LoanBoundsError.zeroAmountError:
+        return 'Сумма первоначального взноса не может быть 0';
+      case LoanBoundsError.zeroPeriodError:
+        return 'Период не может быть 0';
+      case LoanBoundsError.zeroRateError:
+        return 'Процент не может быть 0';
+      case LoanBoundsError.loanPercentError:
+        return 'Процент не может превышать 100';
+    }
+  }
 }
