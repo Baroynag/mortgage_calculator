@@ -6,6 +6,7 @@ import 'package:mortgage_calculator/bloc/loan_calculator_event.dart';
 import 'package:mortgage_calculator/bloc/loan_calculator_state.dart';
 import 'package:mortgage_calculator/domain/loan_error.dart';
 import 'package:mortgage_calculator/helpers/input_formatter.dart';
+import 'package:mortgage_calculator/loan_calculator/loan_calculator_screen_theme.dart';
 import 'package:mortgage_calculator/widgets/calcultor_payment_card.dart';
 import 'package:mortgage_calculator/widgets/input_field.dart';
 
@@ -34,7 +35,10 @@ class LoanCalculatorScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(
+    BuildContext context,
+  ) {
+    final theme = LoanCalculatorTheme.of(context);
     final bloc = context.read<LoanCalculatorBloc>();
     final state = bloc.state as LoanCalculatorState;
     final calculator = state.calculator;
@@ -43,7 +47,7 @@ class LoanCalculatorScreen extends StatelessWidget {
       LengthLimitingTextInputFormatter(9),
     ];
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: theme?.padding ?? EdgeInsets.zero,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -61,7 +65,7 @@ class LoanCalculatorScreen extends StatelessWidget {
                 );
               },
             ),
-            _fieldDelimiter(),
+            _fieldDelimiter(theme),
             InputField(
               value: calculator.loanPeriod.toString(),
               keyboardType: TextInputType.number,
@@ -75,7 +79,7 @@ class LoanCalculatorScreen extends StatelessWidget {
                 );
               },
             ),
-            _fieldDelimiter(),
+            _fieldDelimiter(theme),
             InputField(
               value: calculator.rate.toString(),
               inputFormatters: [
@@ -94,8 +98,8 @@ class LoanCalculatorScreen extends StatelessWidget {
                 ));
               },
             ),
-            _buildLoanAmountBoundsError(context),
-            _fieldDelimiter(),
+            _buildLoanAmountBoundsError(context, theme),
+            _fieldDelimiter(theme),
             _buildPaymentInfoCard(context),
           ],
         ),
@@ -103,7 +107,10 @@ class LoanCalculatorScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLoanAmountBoundsError(BuildContext context) {
+  Widget _buildLoanAmountBoundsError(
+    BuildContext context,
+    LoanCalculatorTheme? theme,
+  ) {
     final bloc = context.read<LoanCalculatorBloc>();
     final state = bloc.state as LoanCalculatorState;
     final calculator = state.calculator;
@@ -112,10 +119,10 @@ class LoanCalculatorScreen extends StatelessWidget {
     return boundError == null
         ? const SizedBox()
         : Padding(
-            padding: const EdgeInsets.all(8),
+            padding: theme?.errorTextPadding ?? EdgeInsets.zero,
             child: Text(
               boundError.message,
-              style: const TextStyle(color: Colors.red, fontSize: 14),
+              style: theme?.errorTextStyle,
             ),
           );
   }
@@ -142,5 +149,6 @@ class LoanCalculatorScreen extends StatelessWidget {
     }
   }
 
-  Widget _fieldDelimiter() => const SizedBox(height: 16);
+  Widget _fieldDelimiter(LoanCalculatorTheme? theme) =>
+      SizedBox(height: theme?.rowSpacing);
 }

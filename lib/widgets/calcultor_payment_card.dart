@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mortgage_calculator/domain/payment_type.dart';
+import 'package:mortgage_calculator/widgets/calcultor_payment_card_theme.dart';
 
 class CalculatorPaymentCard extends StatelessWidget {
   final PaymentType type;
@@ -21,32 +22,33 @@ class CalculatorPaymentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = CalculatorPaymentCardTheme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.lightBlue.withOpacity(0.7),
-      ),
+      padding: theme?.padding,
+      decoration: theme?.decoration,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+            padding: theme?.selectorPadding,
+            decoration: theme?.selectorDecoration,
+            child: _buildPaymentTypeSelector1(
+              context,
+              theme,
             ),
-            child: _buildPaymentTypeSelector(context),
           ),
-          const SizedBox(height: 16),
-          ..._buildInfoRows(context),
+          SizedBox(height: theme?.spacing),
+          ..._buildInfoRows(context, theme),
         ],
       ),
     );
   }
 
-  Widget _buildPaymentTypeSelector(BuildContext context) {
+  Widget _buildPaymentTypeSelector1(
+    BuildContext context,
+    CalculatorPaymentCardTheme? theme,
+  ) {
     const supportToggles = PaymentType.values;
     int selectedIndex = supportToggles.indexOf(type);
     return Column(
@@ -61,12 +63,12 @@ class CalculatorPaymentCard extends StatelessWidget {
             final selectedType = supportToggles[index];
             onPaymentTypeSelected?.call(selectedType);
           },
-          borderRadius: BorderRadius.circular(16),
-          fillColor: Colors.lightBlue,
-          selectedColor: Colors.black,
+          borderRadius: theme?.borderRadius,
+          fillColor: theme?.fillColor,
+          selectedColor: theme?.selectedColor,
           children: supportToggles.map((paymentType) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: theme?.selectorTextPadding ?? EdgeInsets.zero,
               child: Text(paymentType.title()),
             );
           }).toList(),
@@ -75,29 +77,37 @@ class CalculatorPaymentCard extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildInfoRows(BuildContext context) {
+  List<Widget> _buildInfoRows(
+    BuildContext context,
+    CalculatorPaymentCardTheme? theme,
+  ) {
     final infoRows = [
       _buildField(
         context,
         "Ежемесячный платеж",
         monthlyPayment.toString(),
+        theme,
       ),
       _buildField(
         context,
         "Cумма кредита",
         loanAmount.toString(),
+        theme,
       ),
       _buildField(
         context,
         "Общая сумма выплат по кредиту",
         totalPaymentSum.toString(),
+        theme,
       ),
       _buildField(
         context,
         "Сумма переплаты по кредиту",
         totalOverPaymentSum.toString(),
+        theme,
       ),
     ];
+
     return infoRows;
   }
 
@@ -105,13 +115,17 @@ class CalculatorPaymentCard extends StatelessWidget {
     BuildContext context,
     String title,
     String description,
+    CalculatorPaymentCardTheme? theme,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: theme?.fieldPadding ?? EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [Text(title, maxLines: 1), Text(description)],
+        children: [
+          Text(title, maxLines: theme?.textMaxLines),
+          Text(description),
+        ],
       ),
     );
   }
