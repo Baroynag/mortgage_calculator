@@ -9,7 +9,7 @@ class LoanCalculatorBloc
     extends Bloc<LoanCalculatorEvent, BaseLoanCalculatorState> {
   final LoanCalculator _calculator = LoanCalculator.defaultCalc();
 
-  LoanCalculatorBloc() : super(LoanCalculatorInitialState()) {
+  LoanCalculatorBloc() : super(BaseLoanCalculatorState()) {
     on<CalculatorInitEvent>(_onInitialEvent);
     on<CalculatorPaymentTypeChangeEvent>(_onPaymentTypeChange);
     on<CalculatorTotalAmountChangedEvent>(_onTotalAmountChanged);
