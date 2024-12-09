@@ -30,13 +30,18 @@ class CalculatorPaymentCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: theme?.selectorPadding,
-            decoration: theme?.selectorDecoration,
-            child: _buildPaymentTypeSelector1(
-              context,
-              theme,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: theme?.selectorPadding,
+                decoration: theme?.selectorDecoration,
+                child: _buildPaymentTypeSelector(
+                  context,
+                  theme,
+                ),
+              ),
+            ],
           ),
           SizedBox(height: theme?.spacing),
           ..._buildInfoRows(context, theme),
@@ -45,35 +50,36 @@ class CalculatorPaymentCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentTypeSelector1(
+  Widget _buildPaymentTypeSelector(
     BuildContext context,
     CalculatorPaymentCardTheme? theme,
   ) {
     const supportToggles = PaymentType.values;
     int selectedIndex = supportToggles.indexOf(type);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ToggleButtons(
-          isSelected: List<bool>.generate(
-            supportToggles.length,
-            (index) => index == selectedIndex,
+    return ToggleButtons(
+      isSelected: List<bool>.generate(
+        supportToggles.length,
+        (index) => index == selectedIndex,
+      ),
+      onPressed: (index) {
+        final selectedType = supportToggles[index];
+        onPaymentTypeSelected?.call(selectedType);
+      },
+      borderRadius: theme?.borderRadius,
+      fillColor: theme?.fillColor,
+      selectedColor: theme?.selectedColor,
+      children: supportToggles.map((paymentType) {
+        return Padding(
+          padding: theme?.selectorTextPadding ?? EdgeInsets.zero,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              paymentType.title(),
+              style: theme?.selectorTextStyle,
+            ),
           ),
-          onPressed: (index) {
-            final selectedType = supportToggles[index];
-            onPaymentTypeSelected?.call(selectedType);
-          },
-          borderRadius: theme?.borderRadius,
-          fillColor: theme?.fillColor,
-          selectedColor: theme?.selectedColor,
-          children: supportToggles.map((paymentType) {
-            return Padding(
-              padding: theme?.selectorTextPadding ?? EdgeInsets.zero,
-              child: Text(paymentType.title()),
-            );
-          }).toList(),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 

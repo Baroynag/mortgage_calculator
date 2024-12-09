@@ -16,6 +16,7 @@ class CalculatorPaymentCardTheme
   final EdgeInsetsGeometry? fieldPadding;
   final double? spacing;
   final int? textMaxLines;
+  final TextStyle? selectorTextStyle;
 
   const CalculatorPaymentCardTheme({
     this.padding,
@@ -29,6 +30,7 @@ class CalculatorPaymentCardTheme
     this.fieldPadding,
     this.spacing,
     this.textMaxLines,
+    this.selectorTextStyle,
   });
 
   @override

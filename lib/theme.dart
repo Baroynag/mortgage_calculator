@@ -12,7 +12,7 @@ LoanCalculatorTheme getLoanCalculatorTheme() {
 
 CalculatorPaymentCardTheme getCalculatorPaymentCardTheme() {
   return CalculatorPaymentCardTheme(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 28),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20),
       color: Colors.lightBlue.withOpacity(0.7),
@@ -26,9 +26,10 @@ CalculatorPaymentCardTheme getCalculatorPaymentCardTheme() {
     fillColor: Colors.lightBlue,
     selectedColor: Colors.black,
     selectorTextPadding: const EdgeInsets.symmetric(
-      horizontal: 16,
+      horizontal: 4,
       vertical: 8,
     ),
+    selectorTextStyle: TextStyle(fontSize: 12),
     fieldPadding: const EdgeInsets.all(8.0),
     spacing: 16,
     textMaxLines: 1,
