@@ -65,7 +65,7 @@ class LoanCalculatorScreen extends StatelessWidget {
                 );
               },
             ),
-            _fieldDelimiter(theme),
+            SizedBox(height: theme?.rowSpacing),
             InputField(
               value: calculator.loanPeriod.toString(),
               keyboardType: TextInputType.number,
@@ -79,7 +79,7 @@ class LoanCalculatorScreen extends StatelessWidget {
                 );
               },
             ),
-            _fieldDelimiter(theme),
+            SizedBox(height: theme?.rowSpacing),
             InputField(
               value: calculator.rate.toString(),
               inputFormatters: [
@@ -98,33 +98,16 @@ class LoanCalculatorScreen extends StatelessWidget {
                 ));
               },
             ),
-            _buildLoanAmountBoundsError(context, theme),
-            _fieldDelimiter(theme),
+            _LoanBoundsErrorWidget(
+              boundError: calculator.loanBoundsError,
+              theme: theme,
+            ),
+            SizedBox(height: theme?.rowSpacing),
             _buildPaymentInfoCard(context),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildLoanAmountBoundsError(
-    BuildContext context,
-    LoanCalculatorTheme? theme,
-  ) {
-    final bloc = context.read<LoanCalculatorBloc>();
-    final state = bloc.state as LoanCalculatorState;
-    final calculator = state.calculator;
-    final boundError = calculator.loanBoundsError;
-
-    return boundError == null
-        ? const SizedBox()
-        : Padding(
-            padding: theme?.errorTextPadding ?? EdgeInsets.zero,
-            child: Text(
-              boundError.errorText(),
-              style: theme?.errorTextStyle,
-            ),
-          );
   }
 
   Widget _buildPaymentInfoCard(BuildContext context) {
@@ -148,7 +131,28 @@ class LoanCalculatorScreen extends StatelessWidget {
       return const SizedBox();
     }
   }
+}
 
-  Widget _fieldDelimiter(LoanCalculatorTheme? theme) =>
-      SizedBox(height: theme?.rowSpacing);
+class _LoanBoundsErrorWidget extends StatelessWidget {
+  final LoanBoundsError? boundError;
+  final LoanCalculatorTheme? theme;
+
+  const _LoanBoundsErrorWidget({
+    Key? key,
+    this.theme,
+    this.boundError,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return boundError == null
+        ? const SizedBox()
+        : Padding(
+            padding: theme?.errorTextPadding ?? EdgeInsets.zero,
+            child: Text(
+              boundError!.errorText(),
+              style: theme?.errorTextStyle,
+            ),
+          );
+  }
 }
